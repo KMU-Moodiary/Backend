@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "app.jwt.key",
+      "type": "java.lang.String",
+      "description": "key for jwt token signing."
+    },
+    {
+      "name": "kakao.oauth.client-id",
+      "type": "java.lang.String",
+      "description": "Description for kakao.oauth.client-id."
+    },
+    {
+      "name": "kakao.oauth.redirect-uri",
+      "type": "java.lang.String",
+      "description": "Description for kakao.oauth.redirect-uri."
+    }
+  ]
+}

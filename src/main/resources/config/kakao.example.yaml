@@ -1,0 +1,4 @@
+kakao:
+  oauth:
+    client-id: (your-client-id)
+    redirect-uri: (your-redirect-uri)

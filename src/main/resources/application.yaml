@@ -1,0 +1,16 @@
+server:
+  servlet:
+    context-path: /api
+    encoding:
+      charset: UTF-8
+      force-response: true
+
+spring:
+  mvc:
+    log-resolved-exception: false
+  config:
+    import:
+      - classpath:config/jwt.yaml
+      - classpath:config/kakao.yaml
+      - classpath:config/mongo.yaml
+      - classpath:config/openai.yaml
