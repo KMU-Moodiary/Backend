@@ -1,7 +1,10 @@
 package com.github.son_daehyeon.domain.diary.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.son_daehyeon.common.api.dto.response.ApiResponse;
-import com.github.son_daehyeon.common.security.util.UserContext;
 import com.github.son_daehyeon.domain.diary.dto.request.CreateDiaryRequest;
 import com.github.son_daehyeon.domain.diary.dto.response.CreateDiaryResponse;
 import com.github.son_daehyeon.domain.diary.dto.response.GetDiariesResponse;
@@ -27,6 +29,13 @@ public class DiaryController {
 
 	private final DiaryService diaryService;
 
+	@GetMapping
+	@PreAuthorize("isAuthenticated()")
+	public ApiResponse<GetDiariesResponse> getDiaries(@AuthenticationPrincipal User user) {
+
+		return ApiResponse.ok(diaryService.getDiaries(user));
+	}
+
 	@GetMapping("/{id}")
 	@PreAuthorize("isAuthenticated()")
 	public ApiResponse<GetDiaryResponse> getDiary(@PathVariable("id") String id) {
@@ -34,21 +43,26 @@ public class DiaryController {
 		return ApiResponse.ok(diaryService.getDiary(id));
 	}
 
-	@GetMapping
-	@PreAuthorize("isAuthenticated()")
-	public ApiResponse<GetDiariesResponse> getDiary() {
-
-		User user = UserContext.getUser();
-
-		return ApiResponse.ok(diaryService.getDiaries(user));
-	}
-
 	@PostMapping("/create")
 	@PreAuthorize("isAuthenticated()")
-	public ApiResponse<CreateDiaryResponse> createDiary(@RequestBody @Valid CreateDiaryRequest request) {
-
-		User user = UserContext.getUser();
+	public ApiResponse<CreateDiaryResponse> createDiary(@AuthenticationPrincipal User user, @RequestBody @Valid CreateDiaryRequest request) {
 
 		return ApiResponse.ok(diaryService.createDiary(user, request));
+	}
+
+	@PatchMapping("/{id}")
+	@PreAuthorize("isAuthenticated()")
+	public ApiResponse<CreateDiaryResponse> updateDiary(@PathVariable("id") String id, @RequestBody @Valid CreateDiaryRequest request) {
+
+		return ApiResponse.ok(diaryService.updateDiary(id, request));
+	}
+
+	@DeleteMapping("/{id}")
+	@PreAuthorize("isAuthenticated()")
+	public ApiResponse<Void> deleteDiary(@PathVariable("id") String id) {
+
+		diaryService.deleteDiary(id);
+
+		return ApiResponse.ok();
 	}
 }

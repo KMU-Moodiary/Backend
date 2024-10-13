@@ -1,6 +1,7 @@
 package com.github.son_daehyeon.domain.auth.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.son_daehyeon.common.api.dto.response.ApiResponse;
-import com.github.son_daehyeon.common.security.util.UserContext;
 import com.github.son_daehyeon.domain.auth.dto.request.LoginRequest;
 import com.github.son_daehyeon.domain.auth.dto.response.LoginResponse;
 import com.github.son_daehyeon.domain.auth.dto.response.MyInfoResponse;
@@ -33,9 +33,7 @@ public class AuthController {
 
 	@GetMapping("/me")
 	@PreAuthorize("isAuthenticated()")
-	public ApiResponse<MyInfoResponse> me() {
-
-		User user = UserContext.getUser();
+	public ApiResponse<MyInfoResponse> me(@AuthenticationPrincipal User user) {
 
 		return ApiResponse.ok(authService.me(user));
 	}

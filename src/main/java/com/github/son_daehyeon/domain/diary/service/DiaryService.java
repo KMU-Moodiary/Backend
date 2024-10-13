@@ -82,6 +82,35 @@ public class DiaryService {
 								  .build();
 	}
 
+	public CreateDiaryResponse updateDiary(String id, CreateDiaryRequest dto) {
+
+		Diary diary = diaryRepository.findById(id).orElseThrow();
+
+		String content = dto.content();
+
+		MoodiaryInfo moodiaryInfo = generateMoodiaryInfo(content);
+
+		MoodiaryInfo.Emotion emotion = moodiaryInfo.emotion();
+		String feedback = moodiaryInfo.feedback();
+
+		diary.setContent(content);
+		diary.setEmotion(emotion);
+		diary.setFeedback(feedback);
+
+		diary = diaryRepository.save(diary);
+
+		return CreateDiaryResponse.builder()
+								  .diary(diary)
+								  .build();
+	}
+
+	public void deleteDiary(String id) {
+
+		Diary diary = diaryRepository.findById(id).orElseThrow();
+
+		diaryRepository.delete(diary);
+	}
+
 	private MoodiaryInfo generateMoodiaryInfo(String content) {
 
 		try {
